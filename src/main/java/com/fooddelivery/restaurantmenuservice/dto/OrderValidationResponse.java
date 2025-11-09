@@ -1,12 +1,16 @@
 package com.fooddelivery.restaurantmenuservice.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderValidationResponse {
     private boolean isValid;
     private String rejectionReason;
@@ -16,6 +20,8 @@ public class OrderValidationResponse {
 
     @Data
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ValidatedItem {
         private String itemId;
         private BigDecimal price;
