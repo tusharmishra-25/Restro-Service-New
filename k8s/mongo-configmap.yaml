@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+  labels:
+    app: mongo
+data:
+  host: mongo-restaurant-db-service
+  port: "27017"
+  # Name of the database used in the Spring Boot application.properties
+  database: restaurant-db
