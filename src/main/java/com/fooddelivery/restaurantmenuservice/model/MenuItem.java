@@ -3,7 +3,7 @@ package com.fooddelivery.restaurantmenuservice.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Objects;
-// import java.math.BigDecimal; // Deleted - no longer used
+// import java.math.BigDecimal; // Removed/Not Used
 
 @Document(collection = "menu_items")
 public class MenuItem {
@@ -12,12 +12,13 @@ public class MenuItem {
     private String restaurantId; // Foreign Key reference to Restaurant
     private String name;
     private String category;
-    private Double price; // CRITICAL: Pricing source of truth - now consistently Double
+    private Double price; // CRITICAL: Now correctly and consistently Double
     private boolean isAvailable; // CRITICAL: Item availability check
 
+    // Required No-Argument Constructor for Spring Data Mapping
     public MenuItem() {}
 
-    // FIXED: Constructor now uses Double for price
+    // All-Argument Constructor for Builder/Mapping
     public MenuItem(String id, String restaurantId, String name, String category, Double price, boolean isAvailable) {
         this.id = id;
         this.restaurantId = restaurantId;
@@ -31,55 +32,33 @@ public class MenuItem {
         return new MenuItemBuilder();
     }
 
-    // Getters and Setters (using Double)
+    // Getters and Setters
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
-    public String getRestaurantId() {
-        return restaurantId;
-    }
+    public String getRestaurantId() { return restaurantId; }
 
-    public void setRestaurantId(String restaurantId) {
-        this.restaurantId = restaurantId;
-    }
+    public void setRestaurantId(String restaurantId) { this.restaurantId = restaurantId; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
-    public String getCategory() {
-        return category;
-    }
+    public String getCategory() { return category; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public void setCategory(String category) { this.category = category; }
 
-    public Double getPrice() { // FIXED: Returns Double
-        return price;
-    }
+    public Double getPrice() { return price; }
 
-    public void setPrice(Double price) { // FIXED: Accepts Double
-        this.price = price;
-    }
+    public void setPrice(Double price) { this.price = price; }
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
+    public boolean isAvailable() { return isAvailable; }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
-    }
+    public void setAvailable(boolean available) { isAvailable = available; }
+
+    // Standard equals and hashCode methods
 
     @Override
     public boolean equals(Object o) {
@@ -99,18 +78,17 @@ public class MenuItem {
         return Objects.hash(id, restaurantId, name, category, price, isAvailable);
     }
 
-    // Builder (using Double)
+    // Builder Class
 
     public static class MenuItemBuilder {
         private String id;
         private String restaurantId;
         private String name;
         private String category;
-        private Double price; // FIXED: Uses Double
+        private Double price; // FIXED: Builder uses Double
         private boolean isAvailable;
 
-        MenuItemBuilder() {
-        }
+        MenuItemBuilder() {}
 
         public MenuItemBuilder id(String id) {
             this.id = id;
@@ -132,7 +110,7 @@ public class MenuItem {
             return this;
         }
 
-        public MenuItemBuilder price(Double price) { // FIXED: Accepts Double
+        public MenuItemBuilder price(Double price) { // FIXED: Builder accepts Double
             this.price = price;
             return this;
         }

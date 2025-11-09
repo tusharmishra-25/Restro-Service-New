@@ -2,6 +2,7 @@ package com.fooddelivery.restaurantmenuservice.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field; // Import Field
 import java.time.LocalDateTime;
 
 @Document(collection = "restaurants")
@@ -11,14 +12,19 @@ public class Restaurant {
     private String name;
     private String cuisine;
     private String city;
-    private Double rating;      // Using Double for simplicity
-    private boolean isOpen;     // Mapped to 'open' in JSON
+    
+    // Explicitly mapping the fields to avoid issues with Double/boolean mapping
+    @Field("rating")
+    private Double rating;      
+    
+    @Field("isOpen")
+    private boolean isOpen;     
+    
     private LocalDateTime createdAt;
 
-    // --- FIX: REQUIRED NO-ARG CONSTRUCTOR ---
-    // Spring Data needs this to create the object before setting properties.
+    // Required No-Argument Constructor for Spring Data Mapping
     public Restaurant() {
-        this.createdAt = LocalDateTime.now(); // Set default here
+        this.createdAt = LocalDateTime.now();
     }
 
     // --- Getters and Setters (Standard accessors) ---
@@ -38,11 +44,20 @@ public class Restaurant {
     public Double getRating() { return rating; }
     public void setRating(Double rating) { this.rating = rating; }
     
-    public boolean isOpen() { return isOpen; }
-    public void setOpen(boolean open) { isOpen = open; }
+    // FIXED GETTER: The getter must match the field name if the field is Boolean/boolean
+    public boolean isIsOpen() { return isOpen; }
+    // FIXED SETTER: Setter must match the standard Java Bean convention
+    public void setIsOpen(boolean isOpen) { this.isOpen = isOpen; } 
+    
+    // Backwards-compatible accessors: many callers expect isOpen()/setOpen()
+    // Provide them alongside the isIsOpen()/setIsOpen() to avoid breaking code.
+    public boolean isOpen() { return this.isOpen; }
+    public void setOpen(boolean open) { this.isOpen = open; }
+    
+    // Changing the getter/setter for the boolean flag to match the field name 'isOpen' 
+    // is a common fix for manual models.
+    // The previous getter 'isOpen()' conflicted with JSON output convention 'open'.
     
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    // No equals/hashCode/toString/builder needed for basic mapping fix.
 }
