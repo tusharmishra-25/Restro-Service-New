@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-menu-service
+  labels:
+    app: restaurant-menu-service
+spec:
+  replicas: 1 # Start with 1 replica
+  selector:
+    matchLabels:
+      app: restaurant-menu-service
+  template:
+    metadata:
+      labels:
+        app: restaurant-menu-service
+    spec:
+      containers:
+      - name: restaurant-menu-service
+        # REPLACE THIS with your actual Docker image path (e.g., tusharmishra-25/restro-service-new:latest)
+        image: yourusername/restaurant-menu-service:latest 
+        ports:
+        - containerPort: 8085
+        # Set resource requests/limits as required by the assignment [cite: 520]
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
+        env:
+          # Use ConfigMap for DB host and port, Secret for credentials
+          - name: SPRING_DATA_MONGODB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config
+                key: host
+          - name: SPRING_DATA_MONGODB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config
+                key: port
+        # Readiness and Liveness probes [cite: 520]
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8085
+          initialDelaySeconds: 30
+          periodSeconds: 10
