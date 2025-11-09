@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-menu-service
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: restaurant-menu-service
+  template: 
+    metadata:
+      labels:
+        app: restaurant-menu-service
+    spec:
+      containers:
+      - name: restaurant-menu-service
+        image: yourusername/restaurant-menu-service:latest # CHANGE THIS
+        ports:
+        - containerPort: 8085 
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
+        # Readiness/liveness probes should be included here [cite: 70]

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurant-menu-service
+spec:
+  selector:
+    app: restaurant-menu-service
+  ports:
+    - protocol: TCP
+      port: 8085       # Internal ClusterIP port
+      targetPort: 8085 # Container port
+  [cite_start]type: NodePort       # Exposes the service externally via a node port
