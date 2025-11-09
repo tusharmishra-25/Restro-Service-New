@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-restaurant-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-restaurant-db
+  template:
+    metadata:
+      labels:
+        app: mongo-restaurant-db
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:6.0 # Use a stable MongoDB image
+        ports:
+        - containerPort: 27017
+        env:
+          # Use Secret for sensitive data (e.g., password) - placeholder used here
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: "root"
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: "example"
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          [cite_start]claimName: mongo-restaurant-pvc # Link to the PVC
